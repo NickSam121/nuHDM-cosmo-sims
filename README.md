@@ -1,5 +1,5 @@
 # nuHDM-cosmo-sims
-This describes how to conduct cosmological MOND simulations with Phantom of RAMSES (PoR - which is a MONDified version of RAMSES), on the nuHDM cosmological framework. Samaras, Grandis and Kroupa 2025 (10.1093/mnras/staf1041) have optimized the traditional nuHDM cosmological model to a newer version of it, the opt-nuHDM model. They have modernized it with respect to ESA's Planck 2018 data. Both nuHDM variant models are flat (omK=0), following a FLRW metric in the background. The nuHDM has the same amount of omch2 in omnuh2, but the opt-nuHDM has very different cosmological parameters (opt_nuHDM.ini). There are 3 steps to perform these simulations: first, the generation of Initial Conditions, second the actual hydrodynamical simulations and third the identification of bound structures.
+This describes how to conduct cosmological MOND simulations with Phantom of RAMSES (PoR - which is a MONDified version of RAMSES), on the nuHDM cosmological framework (no SF, no EFE). Samaras, Grandis and Kroupa 2025 (10.1093/mnras/staf1041) have optimized the traditional nuHDM cosmological model to a newer version of it, the opt-nuHDM model. They have modernized it with respect to ESA's Planck 2018 data. Both nuHDM variant models are flat (omK=0), following a FLRW metric in the background. The nuHDM has the same amount of omch2 in omnuh2, but the opt-nuHDM has very different cosmological parameters (opt_nuHDM.ini). There are 3 steps to perform these simulations: first, the generation of Initial Conditions, second the actual hydrodynamical simulations and third the identification of bound structures.
 
 To generate the Initial Conditions with CAMB and MUSIC:
 1. a) These simulations are designed to commence at z = 199.0, so one needs to specify that in CAMB (transfer_redshift(1) = 199.0). Once CAMB is installed, one needs to incorporate the extra, massive but light (11eV), sterile neutrino on the namelist:
@@ -14,7 +14,59 @@ I follow the Wittenburg et al 2023(10.1093/mnras/stad1371) protocol. The sterile
 
 1. b) Wittenburg et al 2023 have modified MUSIC in the source code, in order to include the negative values of the transfer function. Negative T(f) values will mean overdense regions become underdense, and since we work in log space, these will be undesirably neglected. The MUSIC file responsible for that is the src/plugins/transfer_camb.cc (lines 133-159).
 
-2. After the IC are generated, one needs to run PoR to actually perform the hydrodynamical simulations. There is a number of parameters one needs to pay attention. The ngridmax and npartmax usually are set to be equal. If ngridmax >> 2^lmax^3, then the . This happens for instance in this movie (https://www.youtube.com/watch?v=6dDqgxzIuqg), when one can basically see the grid structure. This naturally increase the integration time and the simulation slows down. Therefore ngridmax=npartmax=(2^lmax)^3, if there is no SF.
+2. After the IC are generated, one needs to run PoR to actually perform the hydrodynamical simulations. There is a number of parameters one needs to pay attention. The ngridmax and npartmax usually are set to be equal. If ngridmax >> (2^lmin)^3, then the grid is oversized. This happens for instance in this movie (https://www.youtube.com/watch?v=6dDqgxzIuqg), when one can basically see the grid structure. This naturally increases the integration time and the simulation slows down. Therefore, I have noticed thatit should be: 2^lmin < ngridmax=npartmax, but not (2^lmin)^3 << ngridmax! (if there is neither SF nor EFE). More particularly, if ngridmax is manually set to = 2,100,000, the:
+ngridmax - (2^lmin)^3 = 2,100,000 - 2,097,152 > 0 (but not >> 0). Last, also take into account this note by RAMSES: https://ramses-organisation.readthedocs.io/en/latest/wiki/Amr.html
+
+The best spatial resolution will be boxsize/(2**lmax) [boxsize units]
+
+Furthermore, for NO star-formation, the parameters are:
+&PHYSICS_PARAMS
+isothermal=.false.
+cooling=.true.
+g_star=1.6666D0
+n_star=0.1D0
+eps_star=0.0D0
+t_star=0.0d0 !this basically set the SF=0
+/
+
+IF one wants to activate SF:
+&PHYSICS_PARAMS
+cooling=.true.
+g_star=1.6666D0
+n_star=0.1D0
+eps_star=0.05d0
+t_star=3.0d0
+T2star = 1.0d4
+/
+
+&PHYSICS_PARAMS
+For SN feedback:
+yield = 0.1d0
+etaSN = 0.1d0
+rbubble = 150.0d0
+fek = 0.5d0
+/
+
+If movie=.true. , then:
+the movie_vars=1,1,0,0,0,0,0,0 mean:
+0: temp, 1: dens, 2: vx, 3: vy, 4: vz, 5: pres, 6: dm, 7: stars
+
+
+gnuplot!
+
+
+
+
+
+1. you need to specify in the aexp.c file how many outputs you have in your movie files (lines 19,20,24 and 38)
+2. you need to specify the boxlength in the rmviter.gp, where the plot is actually happening (line 37 the ’100’ in my
+file)
+3. in the rmvloop.gp you need to specify half the boxlength on line 34 and you can of course change other things there
+4. run ./aexp.c
+5. ./a.out
+6. gnuplot rmvloop.gp
+
+7 1.4 * (100000000 / 1e6) + 0.7 * (150000000 / 1e7)
 
 8. AHF convert end with error
    no mpi + makefile.config+ ahf_halos.c varies with model
