@@ -51,8 +51,9 @@ If movie=.true. , then:
 the movie_vars=1,1,0,0,0,0,0,0 mean:
 0: temp, 1: dens, 2: vx, 3: vy, 4: vz, 5: pres, 6: dm, 7: stars
 
+3. Start analyzing the PoR simulation:
+a) With gnuplot, one can have a nice movie of the evolution, like this one: https://www.youtube.com/watch?v=XDeCCL_ln-k
 
-gnuplot!
 
 
 
