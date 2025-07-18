@@ -3,7 +3,6 @@ This describes how to conduct cosmological MOND simulations with Phantom of RAMS
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 To generate the Initial Conditions with CAMB and MUSIC: 
 1. a) These simulations are designed to commence at z = 199.0, so one needs to specify that in CAMB (transfer_redshift(1) = 199.0). Once CAMB is installed, one needs to incorporate the extra, massive but light (11eV), sterile neutrino on the namelist:
    
@@ -32,30 +31,48 @@ The best spatial resolution will be boxsize/(2**lmax) [boxsize units]
 
 Furthermore, for NO star-formation, the parameters are:
 &PHYSICS_PARAMS
+
 isothermal=.false.
+
 cooling=.true.
+
 g_star=1.6666D0
+
 n_star=0.1D0
+
 eps_star=0.0D0
+
 t_star=0.0d0 !this basically set the SF=0
+
 /
 
 IF one wants to activate SF:
 &PHYSICS_PARAMS
 cooling=.true.
+
 g_star=1.6666D0
+
 n_star=0.1D0
+
 eps_star=0.05d0
+
 t_star=3.0d0
+
 T2star = 1.0d4
+
 /
 
 For SN feedback:
 &PHYSICS_PARAMS
+
 yield = 0.1d0
+
 etaSN = 0.1d0
+
 rbubble = 150.0d0
+
 fek = 0.5d0
+
 /
 
 If movie=.true. , then:
@@ -67,20 +84,31 @@ The PoR runs with MPI in 16 tasks in the following case:
 [samarasn@hpc-head b1500]$ cat slurm
 #!/bin/sh
 #SBATCH --time=12:00:00
+
 #SBATCH --mail-user=nicksam@sirrah.troja.mff.cuni.cz
+
 #SBATCH --mail-type=END,FAIL
+
 #SBATCH --job-name="optb1500"
+
 #SBATCH -N 2
+
 #SBATCH -n 16
+
 #SBATCH --mem-per-cpu=50G
+
 #SBATCH -p ffa
 
 ##Chimera
+
 module load oneapi/mpi 
+
 srun ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
 
 ##Karolina 
+
 ml OpenMPI/4.1.4-GCC-11.3
+
 srun ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
 
 Remember that RAMSES (https://ramses-organisation.readthedocs.io/en/latest/wiki/Amr.html) :
