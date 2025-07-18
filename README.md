@@ -89,7 +89,7 @@ ii) in the rmvloop.gp you need to specify half the boxlength on line 34 and you 
 iv) run ./aexp.c
 v) ./a.out
 vi) gnuplot rmvloop.gp
-In case this does not work, there is a stupid solution which always work. One needs to comment out from all the info_000XXX files the last lines right after unit_t with #comment the lines specifying the ordering and the DOMAIN ind_min ind_max.
+In case this does not work, there is a stupid solution which always works. One needs to comment out from all the info_000XXX files the last lines right after unit_t with #comment the lines specifying the ordering and the DOMAIN ind_min ind_max.
 
 8. AHF convert end with error
    no mpi + makefile.config+ ahf_halos.c varies with model
