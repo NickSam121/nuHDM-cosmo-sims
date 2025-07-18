@@ -14,10 +14,9 @@ I follow the Wittenburg et al 2023(10.1093/mnras/stad1371) protocol. The sterile
 
 1. b) Wittenburg et al 2023 have modified MUSIC in the source code, in order to include the negative values of the transfer function. Negative T(f) values will mean overdense regions become underdense, and since we work in log space, these will be undesirably neglected. The MUSIC file responsible for that is the src/plugins/transfer_camb.cc (lines 133-159).
 
-2. After the IC are generated, one needs to run PoR to actually perform the hydrodynamical simulations. There is a number of parameters one needs to pay attention.
-3. The ngridmax and npartmax usually are set to be equal. If ngridmax >> 2^lmax^3, then the . This happens for instance in this movie (https://www.youtube.com/watch?v=6dDqgxzIuqg), when one can basically see the grid structure. This naturally increase the integration time and the simulation slows down. Therefore ngridmax=npartmax=(2^lmax)^3, if there is no SF.
+2. After the IC are generated, one needs to run PoR to actually perform the hydrodynamical simulations. There is a number of parameters one needs to pay attention. The ngridmax and npartmax usually are set to be equal. If ngridmax >> 2^lmax^3, then the . This happens for instance in this movie (https://www.youtube.com/watch?v=6dDqgxzIuqg), when one can basically see the grid structure. This naturally increase the integration time and the simulation slows down. Therefore ngridmax=npartmax=(2^lmax)^3, if there is no SF.
 
-8. AHF convert end wit herror
+8. AHF convert end with error
    no mpi + makefile.config+ ahf_halos.c varies with model
 
 9. pynbody???
