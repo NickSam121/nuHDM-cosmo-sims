@@ -39,8 +39,8 @@ t_star=3.0d0
 T2star = 1.0d4
 /
 
-&PHYSICS_PARAMS
 For SN feedback:
+&PHYSICS_PARAMS
 yield = 0.1d0
 etaSN = 0.1d0
 rbubble = 150.0d0
@@ -51,28 +51,21 @@ If movie=.true. , then:
 the movie_vars=1,1,0,0,0,0,0,0 mean:
 0: temp, 1: dens, 2: vx, 3: vy, 4: vz, 5: pres, 6: dm, 7: stars
 
+SLURM settings:
+ 1.4 * (100000000 / 1e6) + 0.7 * (150000000 / 1e7)
+
+
 3. Start analyzing the PoR simulation:
 a) With gnuplot, one can have a nice movie of the evolution, like this one: https://www.youtube.com/watch?v=XDeCCL_ln-k
-
-
-
-
-
-
-1. you need to specify in the aexp.c file how many outputs you have in your movie files (lines 19,20,24 and 38)
-2. you need to specify the boxlength in the rmviter.gp, where the plot is actually happening (line 37 the ’100’ in my
-file)
-3. in the rmvloop.gp you need to specify half the boxlength on line 34 and you can of course change other things there
-4. run ./aexp.c
-5. ./a.out
-6. gnuplot rmvloop.gp
-
-7 1.4 * (100000000 / 1e6) + 0.7 * (150000000 / 1e7)
+i) You need to specify in the aexp.c file how many outputs you have in your movie files (lines 19,20,24 and 38)
+ii) You need to specify the boxlength in the rmviter.gp, where the plot is actually happening (line 37 the ’100’ in my file)
+ii) in the rmvloop.gp you need to specify half the boxlength on line 34 and you can of course change other things there
+iv) run ./aexp.c
+v) ./a.out
+vi) gnuplot rmvloop.gp
+In case this does not work, there is a stupid solution which always work. One needs to comment out from all the info_000XXX files the last lines right after unit_t with #comment the lines specifying the ordering and the DOMAIN ind_min ind_max.
 
 8. AHF convert end with error
    no mpi + makefile.config+ ahf_halos.c varies with model
 
 9. pynbody???
-
-
-This will generate a box of 200 Mpc/h with Star Formation, radiative cooling, SN feedback, with levelmin = ((2)**7)**3 particles
