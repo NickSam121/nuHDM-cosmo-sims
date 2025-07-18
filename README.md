@@ -1,4 +1,4 @@
-# nuHDM-cosmo-sims
+# νHDM and opt-νHDM cosmological simulations 
 This describes how to conduct cosmological MOND simulations with Phantom of RAMSES (PoR - which is a MONDified version of RAMSES), on the nuHDM cosmological framework (no SF, no EFE). Samaras, Grandis and Kroupa 2025 (10.1093/mnras/staf1041) have optimized the traditional nuHDM cosmological model to a newer version of it, the opt-nuHDM model. They have modernized it with respect to ESA's Planck 2018 data. Both nuHDM variant models are flat (omK=0), following a FLRW metric in the background. The nuHDM has the same amount of omch2 in omnuh2, but the opt-nuHDM has very different cosmological parameters (opt_nuHDM.ini). There are 3 steps to perform these simulations: first, the generation of Initial Conditions, second the actual hydrodynamical simulations and third the identification of bound structures.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
