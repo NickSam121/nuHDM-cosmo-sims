@@ -51,8 +51,29 @@ If movie=.true. , then:
 the movie_vars=1,1,0,0,0,0,0,0 mean:
 0: temp, 1: dens, 2: vx, 3: vy, 4: vz, 5: pres, 6: dm, 7: stars
 
-SLURM settings:
- 1.4 * (100000000 / 1e6) + 0.7 * (150000000 / 1e7)
+Modern computer clusters often use schedulers like SLURM. I have been using SLURM in the  CHIMERA cluster in Prague (https://gitlab.mff.cuni.cz/mff/hpc/clusters, but you probably need access for that...). 
+The PoR runs with MPI in 16 tasks in the following case:
+[samarasn@hpc-head b1500]$ cat slurm
+#!/bin/sh
+#SBATCH --time=12:00:00
+#SBATCH --mail-user=nicksam@sirrah.troja.mff.cuni.cz
+#SBATCH --mail-type=END,FAIL
+#SBATCH --job-name="optb1500"
+#SBATCH -N 2
+#SBATCH -n 16
+#SBATCH --mem-per-cpu=50G
+#SBATCH -p ffa
+
+##Chimera
+module load oneapi/mpi 
+srun ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
+
+##Karolina 
+ml OpenMPI/4.1.4-GCC-11.3
+srun ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
+
+Remember that RAMSES (https://ramses-organisation.readthedocs.io/en/latest/wiki/Amr.html) :
+1.4 * (ngridmax / 1e6) + 0.7 * (npartmax / 1e7)
 
 
 3. Start analyzing the PoR simulation:
