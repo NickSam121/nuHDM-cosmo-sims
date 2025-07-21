@@ -108,7 +108,8 @@ Most likely, this procedure (no MPI needed here) will end with an error in less 
    Before running, one needs to modify the source code and more particularly the ahf_halos.c. This will cause a MOND boost to the dynamical mass estimation (Wittenburg et al. 2023, section 2.5 & also Angus et al. 2011). Quoting Wittenburg et al. 2023 "In MOND, the Newtonian gravitational acceleration is enhanced by a factor ν, but this enhancement can also be achieved within Newtonian gravity if we rescale the enclosed mass M(r)...". Remember that this varies, since there is a H0 dependence. Thus, one should modify and make clean and make for nuHDM and opt-nuHDM simulations. I usually run this without mpi and without openMP. In case one get an error at the xlocale.h of the sorthalo.c routine, then substitute it simply with the locale.h. It should work by removing the "x". On the Makefile.config:
    
    SYSTEM =        "Standard OpenMP"
-   
+   DEFINEFLAGS	= -DGADGET -DMULTIMASS -DGAS_PARTICLES 
+
 ifeq ($(SYSTEM), "Standard OpenMP Darwin")
 	CC         	=	clang -std=c99 -Xclang -fopenmp 
 	FC 	      	=	gfortran
