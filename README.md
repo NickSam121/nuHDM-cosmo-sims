@@ -82,16 +82,47 @@ Remember that RAMSES (https://ramses-organisation.readthedocs.io/en/latest/wiki/
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 3. Start analyzing the PoR simulation:
-a) With gnuplot, one can have a nice movie of the evolution, like this one: https://www.youtube.com/watch?v=XDeCCL_ln-k
+a) With the gnuplot (gnuplot rmvloop.gp) script, one can have a nice movie of the evolution, like this one: https://www.youtube.com/watch?v=XDeCCL_ln-k
 i) You need to specify in the aexp.c file how many outputs you have in your movie files (lines 19,20,24 and 38)
 ii) You need to specify the boxlength in the rmviter.gp, where the plot is actually happening (line 37 the ’100’ in my file)
 ii) in the rmvloop.gp you need to specify half the boxlength on line 34 and you can of course change other things there
 iv) run ./aexp.c
 v) ./a.out
 vi) gnuplot rmvloop.gp
-In case this does not work, there is a stupid solution which always works. One needs to comment out from all the info_000XXX files the last lines right after unit_t with #comment the lines specifying the ordering and the DOMAIN ind_min ind_max.
+In case this does not work, there is a stupid solution which always works. One needs to comment out from all the info_000XXX files the last lines right after unit_t with #comment the
+lines specifying the ordering and the DOMAIN ind_min ind_max.
 
-8. AHF convert end with error
-   no mpi + makefile.config+ ahf_halos.c varies with model
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-9. pynbody???
+8. Finding bound structures with Amiga Halo Finder (AHF)
+   a) Before finding the structures, one needs to convert the RAMSES output_000XX ouput data to AFH-input format. More analytically:
+   https://github.com/weiguangcui/AHF/blob/master/convert/ramses2gadget.f90
+   
+   As Wittenburg et al 2023 quote: The converter routine is used for converting grid cells of RAMSES into "cell particles" located at the cell centre with the same mass (gadget format). Like RAMSES, AHF is an AMR-based code that uses the adaptive refinement strategy to identify subhaloes at a modest computational cost.
+   For only sterile neutrino ---> ./ramses2gadget -dm output_0000X
+   For gas data              ---> ./ramses2gadget -g  output_0000X
+   For both gas+dm           ---> ./ramses2gadget -i  output_0000X
+Most likely, this procedure (no MPI needed here) will end with an error.
+
+   b)no mpi + makefile.config+ ahf_halos.c varies with model
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+10. pynbody???
