@@ -13,9 +13,9 @@ share_delta_neff = F
 nu_mass_degeneracies = 1.0147 1
 nu_mass_fractions = 0.0044 0.9956
 
-I follow the Wittenburg et al 2023(10.1093/mnras/stad1371) protocol. The sterile neutrino will have to two mass eigenstates with different mass degeneracies. The opt-nuHDM sterile neutrino will have a similar mass (\approx 13eV), so identical parameters. If the accurracy boost, if set = 5, will naturally slow down the CAMB simulation.  The first thing to check is the CMB fit (want_CMB = T). What is however needed is the transfer function at z=199 (get_transfer = T, transfer_high_precision = T accurate_massive_neutrino_transfers = T). The transfer function will be the input for MUSIC, which will sample the spectrum and it will go from the Fourier space to the physical space, providing a binary file as an input for PoR. The opt-nuHDM will NOT fit the Planck CMB. While the opt-nuHDM was a nearly perfect fit to the CMB, with CosmoSIS mcmc sampler, if one writes the output posterior parameters into CAMB, one simple does not find any correspondance and the fit is bad. I solve the problem, by scaling the resulting z = 199 transfer function, so that the CAMB transfer function is the same as the CosmoSIS one. This is not the best way to do it, but one needs to understand the different physics that the two codes are making use of. In the end, one needs not the CMB but the Transfer function for MUSIC. Obviously, one obtains one transfer function for nuHDM and one for the opt-nuHDM, running the corresponding namelists. Once they are generated, each of them individually go to MUSIC.
+I follow the Wittenburg et al. 2023(10.1093/mnras/stad1371) protocol. The sterile neutrino will have to two mass eigenstates with different mass degeneracies. The opt-nuHDM sterile neutrino will have a similar mass (\approx 13eV), so identical parameters. If the accurracy boost, if set = 5, will naturally slow down the CAMB simulation.  The first thing to check is the CMB fit (want_CMB = T). What is however needed is the transfer function at z=199 (get_transfer = T, transfer_high_precision = T accurate_massive_neutrino_transfers = T). The transfer function will be the input for MUSIC, which will sample the spectrum and it will go from the Fourier space to the physical space, providing a binary file as an input for PoR. The opt-nuHDM will NOT fit the Planck CMB. While the opt-nuHDM was a nearly perfect fit to the CMB, with CosmoSIS mcmc sampler, if one writes the output posterior parameters into CAMB, one simple does not find any correspondance and the fit is bad. I solve the problem, by scaling the resulting z = 199 transfer function, so that the CAMB transfer function is the same as the CosmoSIS one. This is not the best way to do it, but one needs to understand the different physics that the two codes are making use of. In the end, one needs not the CMB but the Transfer function for MUSIC. Obviously, one obtains one transfer function for nuHDM and one for the opt-nuHDM, running the corresponding namelists. Once they are generated, each of them individually go to MUSIC.
 
-1. b) Wittenburg et al 2023 have modified MUSIC in the source code, in order to include the negative values of the transfer function. Negative T(f) values will mean overdense regions become underdense, and since we work in log space, these will be undesirably neglected. The MUSIC file responsible for that is the src/plugins/transfer_camb.cc (lines 133-159).
+1. b) Wittenburg et al. 2023 have modified MUSIC in the source code, in order to include the negative values of the transfer function. Negative T(f) values will mean overdense regions become underdense, and since we work in log space, these will be undesirably neglected. The MUSIC file responsible for that is the src/plugins/transfer_camb.cc (lines 133-159).
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 2. After the IC are generated, one needs to run PoR to actually perform the hydrodynamical simulations. There is a number of parameters one needs to pay attention. The ngridmax and npartmax usually are set to be equal. If ngridmax >> (2^lmin)^3, then the grid is oversized. This happens for instance in this movie (https://www.youtube.com/watch?v=6dDqgxzIuqg), when one can basically see the grid structure. This naturally increases the integration time and the simulation slows down. Therefore, I have noticed thatit should be: 2^lmin < ngridmax=npartmax, but not (2^lmin)^3 << ngridmax! (if there is neither SF nor EFE). More particularly, if ngridmax is manually set to = 2,100,000, the:
@@ -94,36 +94,31 @@ lines specifying the ordering and the DOMAIN ind_min ind_max.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-8. Finding bound structures with Amiga Halo Finder (AHF)
+4. Finding bound structures with Amiga Halo Finder (AHF)
    a) Before finding the structures, one needs to convert the RAMSES output_000XX ouput data to AFH-input format. More analytically:
    https://github.com/weiguangcui/AHF/blob/master/convert/ramses2gadget.f90
    
-   As Wittenburg et al 2023 quote: The converter routine is used for converting grid cells of RAMSES into "cell particles" located at the cell centre with the same mass (gadget format). Like RAMSES, AHF is an AMR-based code that uses the adaptive refinement strategy to identify subhaloes at a modest computational cost.
+   As Wittenburg et al. 2023 quote: The converter routine is used for converting grid cells of RAMSES into "cell particles" located at the cell centre with the same mass (gadget format). Like RAMSES, AHF is an AMR-based code that uses the adaptive refinement strategy to identify subhaloes at a modest computational cost.
    For only sterile neutrino ---> ./ramses2gadget -dm output_0000X
    For gas data              ---> ./ramses2gadget -g  output_0000X
    For both gas+dm           ---> ./ramses2gadget -i  output_0000X
 Most likely, this procedure (no MPI needed here) will end with an error in less approximately less than 5 minutes. I usually run this on the head node of the cluster.  It is not memory expensive.
 
    b)AHF. The identification of the bound structures:
-   no mpi + makefile.config+ ahf_halos.c varies with model
+   Before running, one needs to modify the source code and more particularly the ahf_halos.c. This will cause a MOND boost to the dynamical mass estimation (Wittenburg et al. 2023, section 2.5 & also Angus et al. 2011). Quoting Wittenburg et al. 2023 "In MOND, the Newtonian gravitational acceleration is enhanced by a factor ν, but this enhancement can also be achieved within Newtonian gravity if we rescale the enclosed mass M(r)...". Remember that this varies, since there is a H0 dependence. Thus, one should modify and make clean and make for nuHDM and opt-nuHDM simulations. I usually run this without mpi and without openMP. In case one get an error at the xlocale.h of the sorthalo.c routine, then substitute it simply with the locale.h. It should work by removing the "x". On the Makefile.config:
+   
+   SYSTEM =        "Standard OpenMP"
+   
+ifeq ($(SYSTEM), "Standard OpenMP Darwin")
+	CC         	=	clang -std=c99 -Xclang -fopenmp 
+	FC 	      	=	gfortran
+	OPTIMIZE	=	-O2 -mcpu=apple-m1
+	CCFLAGS         =       ${INC_HDF5} -I/opt/homebrew/opt/libomp/include
+	LNFLAGS         =       ${LIB_HDF5} -lomp -L/opt/homebrew/opt/libomp/lib
+	DEFINEFLAGS	+=	-DWITH_OPENMP 
+	MAKE		=	make
+endif
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-10. pynbody???
+6. pynbody
