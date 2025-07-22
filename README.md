@@ -46,6 +46,7 @@ t_star=0.0d0 !this basically set the SF=0
 
 /
 
+
 IF one wants to activate SF:
 
 &PHYSICS_PARAMS
@@ -64,6 +65,7 @@ T2star = 1.0d4
 
 /
 
+
 For SN feedback:
 
 &PHYSICS_PARAMS
@@ -78,6 +80,7 @@ fek = 0.5d0
 
 /
 
+
 If movie=.true. , then:
 the movie_vars=1,1,0,0,0,0,0,0 mean:
 0: temp, 1: dens, 2: vx, 3: vy, 4: vz, 5: pres, 6: dm, 7: stars
@@ -86,29 +89,29 @@ Modern computer clusters often use schedulers like SLURM. I have been using SLUR
 The PoR runs with MPI in 16 tasks in the following case:
 [samarasn@hpc-head b1500]$ cat slurm
 
-#!/bin/sh
+   #!/bin/sh
 
-#SBATCH --time=12:00:00
+   #SBATCH --time=12:00:00
 
-#SBATCH --mail-user=nicksam@sirrah.troja.mff.cuni.cz
+   #SBATCH --mail-user=nicksam@sirrah.troja.mff.cuni.cz
 
-#SBATCH --mail-type=END,FAIL
+   #SBATCH --mail-type=END,FAIL
 
-#SBATCH --job-name="optb1500"
+   #SBATCH --job-name="optb1500"
 
-#SBATCH -N 2
+   #SBATCH -N 2
 
-#SBATCH -n 16
+   #SBATCH -n 16
 
-#SBATCH --mem-per-cpu=50G
+   #SBATCH --mem-per-cpu=50G
 
-#SBATCH -p ffa
+   #SBATCH -p ffa
 
-##Chimera
+   ##Chimera
 
-module load oneapi/mpi 
+   module load oneapi/mpi 
 
-srun ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
+   srun ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
 
 ##Karolina 
 
