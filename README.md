@@ -47,21 +47,35 @@ t_star=0.0d0 !this basically set the SF=0
 /
 
 IF one wants to activate SF:
+
 &PHYSICS_PARAMS
+
 cooling=.true.
+
 g_star=1.6666D0
+
 n_star=0.1D0
+
 eps_star=0.05d0
+
 t_star=3.0d0
+
 T2star = 1.0d4
+
 /
 
 For SN feedback:
+
 &PHYSICS_PARAMS
+
 yield = 0.1d0
+
 etaSN = 0.1d0
+
 rbubble = 150.0d0
+
 fek = 0.5d0
+
 /
 
 If movie=.true. , then:
@@ -71,22 +85,35 @@ the movie_vars=1,1,0,0,0,0,0,0 mean:
 Modern computer clusters often use schedulers like SLURM. I have been using SLURM in the  CHIMERA cluster in Prague (https://gitlab.mff.cuni.cz/mff/hpc/clusters, but you probably need access for that...). 
 The PoR runs with MPI in 16 tasks in the following case:
 [samarasn@hpc-head b1500]$ cat slurm
+
 #!/bin/sh
+
 #SBATCH --time=12:00:00
+
 #SBATCH --mail-user=nicksam@sirrah.troja.mff.cuni.cz
+
 #SBATCH --mail-type=END,FAIL
+
 #SBATCH --job-name="optb1500"
+
 #SBATCH -N 2
+
 #SBATCH -n 16
+
 #SBATCH --mem-per-cpu=50G
+
 #SBATCH -p ffa
 
 ##Chimera
+
 module load oneapi/mpi 
+
 srun ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
 
 ##Karolina 
+
 ml OpenMPI/4.1.4-GCC-11.3
+
 srun ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
 
 Remember that RAMSES (https://ramses-organisation.readthedocs.io/en/latest/wiki/Amr.html) :
@@ -121,16 +148,26 @@ Most likely, this procedure (no MPI needed here) will end with an error in less 
    Before running, one needs to modify the source code and more particularly the ahf_halos.c. This will cause a MOND boost to the dynamical mass estimation (Wittenburg et al. 2023, section 2.5 & also Angus et al. 2011). Quoting Wittenburg et al. 2023 "In MOND, the Newtonian gravitational acceleration is enhanced by a factor ν, but this enhancement can also be achieved within Newtonian gravity if we rescale the enclosed mass M(r)...". Remember that this varies, since there is a H0 dependence. Thus, one should modify and make clean and make for nuHDM and opt-nuHDM simulations. I usually run this without mpi and without openMP. In case one get an error at the xlocale.h of the sorthalo.c routine, then substitute it simply with the locale.h. It should work by removing the "x". On the Makefile.config:
    
    SYSTEM =        "Standard OpenMP"
-   DEFINEFLAGS	= -DGADGET -DMULTIMASS -DGAS_PARTICLES 
+
+    DEFINEFLAGS	= -DGADGET -DMULTIMASS -DGAS_PARTICLES 
+
 
 ifeq ($(SYSTEM), "Standard OpenMP Darwin")
-	CC         	=	clang -std=c99 -Xclang -fopenmp 
-	FC 	      	=	gfortran
-	OPTIMIZE	=	-O2 -mcpu=apple-m1
-	CCFLAGS         =       ${INC_HDF5} -I/opt/homebrew/opt/libomp/include
-	LNFLAGS         =       ${LIB_HDF5} -lomp -L/opt/homebrew/opt/libomp/lib
-	DEFINEFLAGS	+=	-DWITH_OPENMP 
-	MAKE		=	make
+
+ CC         	=	clang -std=c99 -Xclang -fopenmp 
+
+ FC 	      	=	gfortran
+
+ OPTIMIZE	=	-O2 -mcpu=apple-m1
+
+ CCFLAGS         =       ${INC_HDF5} -I/opt/homebrew/opt/libomp/include
+
+ LNFLAGS         =       ${LIB_HDF5} -lomp -L/opt/homebrew/opt/libomp/lib
+
+ DEFINEFLAGS	+=	-DWITH_OPENMP 
+
+ MAKE		=	make
+
 endif
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
