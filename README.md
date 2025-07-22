@@ -138,10 +138,14 @@ lines specifying the ordering and the DOMAIN ind_min ind_max.
    a) Before finding the structures, one needs to convert the RAMSES output_000XX ouput data to AFH-input format. More analytically:
    https://github.com/weiguangcui/AHF/blob/master/convert/ramses2gadget.f90
    
-   As Wittenburg et al. 2023 quote: The converter routine is used for converting grid cells of RAMSES into "cell particles" located at the cell centre with the same mass (gadget format). Like RAMSES, AHF is an AMR-based code that uses the adaptive refinement strategy to identify subhaloes at a modest computational cost.
+   As Wittenburg et al. 2023 quote: The converter routine is used for converting grid cells of RAMSES into "cell particles" located at the cell centre with the same mass (gadget format). Like RAMSES, AHF is an AMR-based code that uses the adaptive refinement strategy to identify subhaloes at a modest computational cost:
+   
    For only sterile neutrino ---> ./ramses2gadget -dm output_0000X
+
    For gas data              ---> ./ramses2gadget -g  output_0000X
+
    For both gas+dm           ---> ./ramses2gadget -i  output_0000X
+
 Most likely, this procedure (no MPI needed here) will end with an error in less approximately less than 5 minutes. I usually run this on the head node of the cluster.  It is not memory expensive.
 
    b)AHF. The identification of the bound structures:
@@ -172,4 +176,4 @@ endif
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-6. pynbody
+6. pynbody (under construction)
