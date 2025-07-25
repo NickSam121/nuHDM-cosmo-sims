@@ -24,7 +24,14 @@ I follow the Wittenburg et al. 2023(10.1093/mnras/stad1371) protocol. The steril
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 2. After the IC are generated, one needs to run PoR to actually perform the hydrodynamical simulations. There is a number of parameters one needs to pay attention. The ngridmax and npartmax usually are set to be equal. If ngridmax >> (2^lmin)^3, then the grid is oversized. This happens for instance in this movie (https://www.youtube.com/watch?v=6dDqgxzIuqg), when one can basically see the grid structure. This naturally increases the integration time and the simulation slows down. Therefore, I have noticed thatit should be: 2^lmin < ngridmax=npartmax, but not (2^lmin)^3 << ngridmax! (if there is neither SF nor EFE). More particularly, if ngridmax is manually set to = 2,100,000, the:
-ngridmax - (2^lmin)^3 = 2,100,000 - 2,097,152 > 0 (but not >> 0). Last, also take into account this note by RAMSES: https://ramses-organisation.readthedocs.io/en/latest/wiki/Amr.html
+ngridmax - (2^lmin)^3 = 2,100,000 - 2,097,152 > 0 (but not >> 0). Last, also take into account this note by RAMSES: https://ramses-organisation.readthedocs.io/en/latest/wiki/Amr.htm
+
+In case the mpi of the cluster is "annoyed" by the warnings, then one can ignore them by:
+
+F90 = mpif90 -frecord-marker=4 -O3 -ffree-line-length-none -g -fbacktrace
+
+FFLAGS = -x f95-cpp-input $(DEFINES) -fallow-argument-mismatch
+
 
 The best spatial resolution will be boxsize/(2**lmax) [boxsize units]
 
