@@ -47,7 +47,7 @@ g_star=1.6666D0
 
 n_star=0.1D0
 
-eps_star=0.0D0
+'''eps_star=0.0D0'''
 
 t_star=0.0d0 !this basically set the SF=0
 
