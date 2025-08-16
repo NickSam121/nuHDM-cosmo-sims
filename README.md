@@ -150,6 +150,7 @@ lines specifying the ordering and the DOMAIN ind_min ind_max.
 
    As Wittenburg et al. 2023 quote: The converter routine is used for converting grid cells of RAMSES into "cell particles" located at the cell centre with the same mass (gadget format). In the makefile.config, one must comment out the line 87 in the src/define.h:
    #define AHFptfocus  0             /* only keep particles of type 0                                  */
+   
    If the line is commented out, then the output will contain halos which the Mhalo will be different than the Mgas column.
 
    Like RAMSES, AHF is an AMR-based code that uses the adaptive refinement strategy to identify subhaloes at a modest computational cost:
