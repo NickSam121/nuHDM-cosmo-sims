@@ -8,7 +8,7 @@ While early $\nu$ HDM studies relied on the _WMAP_ data, more recent ones like [
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 To generate the Initial Conditions with [CosmoSIS](https://cosmosis.readthedocs.io/en/latest/index.html), [CAMB](https://camb.readthedocs.io/en/latest/#) and [MUSIC](https://github.com/lue/music): 
-1. a) These simulations are designed to commence at z = 199.0, so one needs to specify that in CAMB (transfer_redshift(1) = 199.0). Once CAMB is installed, one needs to incorporate the extra, massive but light (11eV), sterile neutrino on the namelist:
+-  These simulations are designed to commence at z = 199.0, so one needs to specify that in CAMB (transfer_redshift(1) = 199.0). Once CAMB is installed, one needs to incorporate the extra, massive but light (11eV), sterile neutrino on the namelist:
 ```
 massless_neutrinos = 2.0293
 nu_mass_eigenstates = 2
@@ -17,141 +17,127 @@ share_delta_neff = F
 nu_mass_degeneracies = 1.0147 1
 nu_mass_fractions = 0.0044 0.9956
 ```
-   
-
-
 I follow the [Wittenburg et al. 2023](10.1093/mnras/stad1371) protocol. The sterile neutrino will have to two mass eigenstates with different mass degeneracies. The opt-nuHDM sterile neutrino will have a similar mass ($\approx$ 13 eV), so identical parameters. If the accurracy boost, if set = 5, will naturally slow down the CAMB simulation.  The first thing to check is the CMB fit ```(want_CMB = T)```. What is however needed is the transfer function at z=199 (```get_transfer = T, transfer_high_precision = T accurate_massive_neutrino_transfers = T)```. The transfer function will be the input for MUSIC, which will sample the spectrum and it will go from the Fourier space to the physical space, providing a binary file as an input for PoR. 
 
 The CAMB opt-nuHDM will NOT fit the Planck CMB. While the opt-nuHDM was a nearly perfect fit to the CMB, with CosmoSIS mcmc sampler, if one writes the output posterior parameters into CAMB, one simple does not find any correspondance and the fit is bad. I solved this problem, by scaling the resulting z = 199 transfer function, so that the CAMB transfer function is the same as the CosmoSIS one. This is not the best way to do it, but one needs to understand the different physics that the two codes are making use of. In the end, one needs not the CMB but the Transfer function for MUSIC. Obviously, one obtains one transfer function for nuHDM and one for the opt-nuHDM, running the corresponding namelists. Once they are generated, each of them individually go to MUSIC. For more details, see Samaras & Kroupa 2026, subm.
 
-1. b) [Wittenburg et al. 2023](10.1093/mnras/stad1371) have modified MUSIC in the source code, in order to include the negative values of the transfer function T(f). Negative T(f) values will mean overdense regions become underdense, and since we work in log space, these will be undesirably neglected. The MUSIC file responsible for that is the src/plugins/transfer_camb.cc (lines 133-159).
- 
-2. After the IC are generated, one needs to run PoR to actually perform the hydrodynamical simulations. There is a number of parameters one needs to pay attention. The ngridmax and npartmax usually are set to be equal. If ngridmax >> (2^lmin)^3, then the grid is oversized. This happens for instance in this movie (https://www.youtube.com/watch?v=6dDqgxzIuqg), when one can basically see the grid structure. This naturally increases the integration time and the simulation slows down. Therefore, I have noticed thatit should be: 2^lmin < ngridmax=npartmax, but not (2^lmin)^3 << ngridmax! (if there is neither SF nor EFE). More particularly, if ngridmax is manually set to = 2,100,000, the:
-ngridmax - (2^lmin)^3 = 2,100,000 - 2,097,152 > 0 (but not >> 0). Last, also take into account this note by RAMSES: https://ramses-organisation.readthedocs.io/en/latest/wiki/Amr.htm
+-  [Wittenburg et al. 2023](10.1093/mnras/stad1371) have modified MUSIC in the source code, in order to include the negative values of the transfer function T(f). Negative T(f) values will mean overdense regions become underdense, and since we work in log space, these will be undesirably neglected. The MUSIC file responsible for that is the src/plugins/transfer_camb.cc (lines 133-159).
+  
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-  After the IC are generated, one needs to run PoR to actually perform the hydrodynamical simulations. There is a number of parameters one needs to pay attention. The ngridmax and npartmax usually are set to be equal. If ngridmax >> $2^{lmin^3}$, then the grid is oversized. This happens for instance in this movie of [Wittenburg et al. 2023](10.1093/mnras/stad1371)(https://www.youtube.com/watch?v=6dDqgxzIuqg), when one can basically see the grid structure. This naturally increases the integration time and the simulation slows down. Therefore, I have noticed thatit should be: $2^{lmin}$ < ngridmax=npartmax, but not $2^{lmin^3} << ngridmax! (if neither SF nor EFE are activated).
+More particularly, if ngridmax is manually set to = 2,100,000, the:
+ngridmax -$2^{lmin^3}$ = 2,100,000 - 2,097,152 > 0 (but not >> 0). Last, also take into account this note by RAMSES: https://ramses-organisation.readthedocs.io/en/latest/wiki/Amr.htm
 
 In case the mpi of the cluster is "annoyed" by the warnings, then one can ignore them by:
-
+```
 F90 = mpif90 -frecord-marker=4 -O3 -ffree-line-length-none -g -fbacktrace
-
 FFLAGS = -x f95-cpp-input $(DEFINES) -fallow-argument-mismatch
+```
 
-
-The best spatial resolution will be boxsize/(2**lmax) [boxsize units]
+The best spatial resolution will be boxsize/$2^{lmax} [boxsize units]
 
 Furthermore, for NO star-formation, the parameters are:
-
+```
 &PHYSICS_PARAMS
-
 isothermal=.false.
-
 cooling=.true.
-
 g_star=1.6666D0
-
 n_star=0.1D0
-
-'''eps_star=0.0D0'''
-
+eps_star=0.0D0
 t_star=0.0d0 !this basically set the SF=0
-
 /
-
+```
 
 IF one wants to activate SF:
-
+```
 &PHYSICS_PARAMS
-
 cooling=.true.
-
 g_star=1.6666D0
-
 n_star=0.1D0
-
 eps_star=0.05d0
-
 t_star=3.0d0
-
 T2star = 1.0d4
-
 /
-
+```
 
 For SN feedback:
-
+```
 &PHYSICS_PARAMS
-
 yield = 0.1d0
-
 etaSN = 0.1d0
-
 rbubble = 150.0d0
-
 fek = 0.5d0
-
 /
+```
 
-
-If movie=.true. , then:
-the movie_vars=1,1,0,0,0,0,0,0 mean:
+If ``` movie=.true. ```, then:
+the ``` movie_vars=1,1,0,0,0,0,0,0 ``` mean:
 0: temp, 1: dens, 2: vx, 3: vy, 4: vz, 5: pres, 6: dm, 7: stars
 
 Modern computer clusters often use schedulers like SLURM. I have been using SLURM in the  CHIMERA cluster in Prague (https://gitlab.mff.cuni.cz/mff/hpc/clusters, but you probably need access for that...). 
 The PoR runs with MPI in 16 tasks in the following case:
 [samarasn@hpc-head b1500]$ cat slurm
+```
+#!/bin/sh
+#SBATCH --time=12:00:00
+#SBATCH --mail-user=nicksam@sirrah.troja.mff.cuni.cz
+#SBATCH --mail-type=END,FAIL
+#SBATCH --job-name="optb1500"
+#SBATCH -N 2
+#SBATCH -n 16
+#SBATCH --mem-per-cpu=50G
+#SBATCH -p ffa
 
-   #!/bin/sh
-
-   #SBATCH --time=12:00:00
-
-   #SBATCH --mail-user=nicksam@sirrah.troja.mff.cuni.cz
-
-   #SBATCH --mail-type=END,FAIL
-
-   #SBATCH --job-name="optb1500"
-
-   #SBATCH -N 2
-
-   #SBATCH -n 16
-
-   #SBATCH --mem-per-cpu=50G
-
-   #SBATCH -p ffa
-
-   ##Chimera
-
-   module load oneapi/mpi 
-
-   srun ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
+##Chimera
+module load oneapi/mpi 
+run ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
 
 ##Karolina 
-
 ml OpenMPI/4.1.4-GCC-11.3
-
 srun ~/bonnpor/PoR_hydro/ramses/bin/NWramses3d b1500.nml
+```
 
 Remember that RAMSES (https://ramses-organisation.readthedocs.io/en/latest/wiki/Amr.html) :
+
 1.4 * (ngridmax / 1e6) + 0.7 * (npartmax / 1e7) 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 3. Start analyzing the PoR simulation:
-a) With the gnuplot (gnuplot rmvloop.gp) script, one can have a nice movie of the evolution, like this one: https://www.youtube.com/watch?v=XDeCCL_ln-k
-i) You need to specify in the aexp.c file how many outputs you have in your movie files (lines 19,20,24 and 38)
-ii) You need to specify the boxlength in the rmviter.gp, where the plot is actually happening (line 37 the ’100’ in my file)
-ii) in the rmvloop.gp you need to specify half the boxlength on line 34 and you can of course change other things there
-iv) run ./aexp.c
-v) ./a.out
-vi) gnuplot rmvloop.gp
+-  With the gnuplot (gnuplot rmvloop.gp) script, one can have a nice movie of the evolution, like this one: https://www.youtube.com/watch?v=XDeCCL_ln-k
+-  You need to specify in the aexp.c file how many outputs you have in your movie files (lines 19,20,24 and 38)
+-  You need to specify the boxlength in the rmviter.gp, where the plot is actually happening (line 37 the ’100’ in my file)
+-  in the rmvloop.gp you need to specify half the boxlength on line 34 and you can of course change other things there
+-  run ./aexp.c
+-  ./a.out
+-  gnuplot rmvloop.gp
+  
 In case this does not work, there is a stupid solution which always works. One needs to comment out from all the info_000XXX files the last lines right after unit_t with #comment the
 lines specifying the ordering and the DOMAIN ind_min ind_max.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 4. Finding bound structures with Amiga Halo Finder (AHF)
-   a) Before finding the structures, one needs to convert the RAMSES output_000XX ouput data to AFH-input format. More analytically:
+   - Before running, one needs to modify the source code and more particularly the ahf_halos.c. This will cause a MOND boost to the dynamical mass estimation (Wittenburg et al. 2023, section 2.5 & also Angus et al. 2011). Quoting Wittenburg et al. 2023 "In MOND, the Newtonian gravitational acceleration is enhanced by a factor ν, but this enhancement can also be achieved within Newtonian gravity if we rescale the enclosed mass M(r)...". Remember that this varies, since there is a H0 dependence. Thus, one should modify and make clean and make for nuHDM and opt-nuHDM simulations. I usually run this without mpi and without openMP. In case one get an error at the xlocale.h of the sorthalo.c routine, then substitute it simply with the locale.h. It should work by removing the "x". On the Makefile.config:
+```
+SYSTEM =        "Standard OpenMP"
+DEFINEFLAGS	= -DGADGET -DMULTIMASS -DGAS_PARTICLES 
+ifeq ($(SYSTEM), "Standard OpenMP Darwin")
+   CC         	=	clang -std=c99 -Xclang -fopenmp 
+   FC 	      	=	gfortran
+   OPTIMIZE	=	-O2 -mcpu=apple-m1
+   CCFLAGS         =       ${INC_HDF5} -I/opt/homebrew/opt/libomp/include
+   LNFLAGS         =       ${LIB_HDF5} -lomp -L/opt/homebrew/opt/libomp/lib
+   DEFINEFLAGS	+=	-DWITH_OPENMP 
+   MAKE		=	make
+endif 
+```
+
+   - Before finding the structures, one needs to convert the RAMSES output_000XX ouput data to AFH-input format. More analytically:
    https://github.com/weiguangcui/AHF/blob/master/convert/ramses2gadget.f90
 
-   As Wittenburg et al. 2023 quote: The converter routine is used for converting grid cells of RAMSES into "cell particles" located at the cell centre with the same mass (gadget format). In the makefile.config, one must comment out the line 87 in the src/define.h:
+   - As Wittenburg et al. 2023 quote: The converter routine is used for converting grid cells of RAMSES into "cell particles" located at the cell centre with the same mass (gadget format). In the makefile.config, one must comment out the line 87 in the src/define.h:
    #define AHFptfocus  0             /* only keep particles of type 0                                  */
    
    If the line is commented out, then the output will contain halos which the Mhalo will be different than the Mgas column.
@@ -166,32 +152,35 @@ lines specifying the ordering and the DOMAIN ind_min ind_max.
 
 Most likely, this procedure (no MPI needed here) will end with an error in less approximately less than 5 minutes. I usually run this on the head node of the cluster.  It is not memory expensive.
 
-   b)AHF. The identification of the bound structures:
-   Before running, one needs to modify the source code and more particularly the ahf_halos.c. This will cause a MOND boost to the dynamical mass estimation (Wittenburg et al. 2023, section 2.5 & also Angus et al. 2011). Quoting Wittenburg et al. 2023 "In MOND, the Newtonian gravitational acceleration is enhanced by a factor ν, but this enhancement can also be achieved within Newtonian gravity if we rescale the enclosed mass M(r)...". Remember that this varies, since there is a H0 dependence. Thus, one should modify and make clean and make for nuHDM and opt-nuHDM simulations. I usually run this without mpi and without openMP. In case one get an error at the xlocale.h of the sorthalo.c routine, then substitute it simply with the locale.h. It should work by removing the "x". On the Makefile.config:
-   
-   SYSTEM =        "Standard OpenMP"
-
-    DEFINEFLAGS	= -DGADGET -DMULTIMASS -DGAS_PARTICLES 
-
-
-ifeq ($(SYSTEM), "Standard OpenMP Darwin")
-
- CC         	=	clang -std=c99 -Xclang -fopenmp 
-
- FC 	      	=	gfortran
-
- OPTIMIZE	=	-O2 -mcpu=apple-m1
-
- CCFLAGS         =       ${INC_HDF5} -I/opt/homebrew/opt/libomp/include
-
- LNFLAGS         =       ${LIB_HDF5} -lomp -L/opt/homebrew/opt/libomp/lib
-
- DEFINEFLAGS	+=	-DWITH_OPENMP 
-
- MAKE		=	make
-
-endif
-
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-6. pynbody (under construction)
+6. pynbody
+   To plot in physical coordinates the snapshots are redshift $z=0$.
+```
+import numpy as np
+import matplotlib.pyplot as plt
+import pynbody
+
+a = pynbody.load('/Volumes/T7/NS+2025/data/output_00025/')
+a.physical_units()
+
+font1 = {'family':'serif','size':25}
+plt.rcParams["figure.figsize"] = [6*3, 4*2]
+
+#ATTENTION configure the subplot with bottom=0.079 , top = 0.952, right = 0.91, left=0, NS Aug 2025
+cax = pynbody.plot.image(a.gas, width="200 Mpc", units="Msol kpc^-2", cmap="bone", show_cbar=False)
+#cax = pynbody.plot.image(a.dm, width="200 Mpc", units="Msol kpc^-2", cmap="twilight", show_cbar=False)
+
+cbar = plt.colorbar(cax)
+
+plt.xticks([-100000,-50000,0,50000,100000], ['100','-50','0','50','100'], fontsize=30)
+plt.yticks([-100000,-50000,0,50000,100000], ['100','-50','0','50','100'], fontsize=30)
+plt.xlabel("x/Mpc", fontsize=30)
+plt.ylabel("y/Mpc", fontsize=30)
+cbar.set_label('Density', fontsize=30)
+cbar.ax.tick_params(labelsize=30)
+plt.title(r"$\nu$HDM model (gas) - z = 0", fontsize=30)
+#plt.title(r"$\nu$HDM model ($\nu_S$) - z = 0", fontsize=30)
+plt.tight_layout()
+plt.show()
+```
