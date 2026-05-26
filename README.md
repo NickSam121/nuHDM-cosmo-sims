@@ -7,7 +7,8 @@ While early $\nu$ HDM studies relied on the _WMAP_ data, more recent ones like [
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-To generate the Initial Conditions with [CosmoSIS](https://cosmosis.readthedocs.io/en/latest/index.html), [CAMB](https://camb.readthedocs.io/en/latest/#) and [MUSIC](https://github.com/lue/music): 
+1. To generate the Initial Conditions with [CosmoSIS](https://cosmosis.readthedocs.io/en/latest/index.html), [CAMB](https://camb.readthedocs.io/en/latest/#) and [MUSIC](https://github.com/lue/music):
+
 -  These simulations are designed to commence at z = 199.0, so one needs to specify that in CAMB (transfer_redshift(1) = 199.0). Once CAMB is installed, one needs to incorporate the extra, massive but light (11eV), sterile neutrino on the namelist:
 ```
 massless_neutrinos = 2.0293
@@ -23,9 +24,9 @@ The CAMB opt-nuHDM will NOT fit the Planck CMB. While the opt-nuHDM was a nearly
 
 -  [Wittenburg et al. 2023](10.1093/mnras/stad1371) have modified MUSIC in the source code, in order to include the negative values of the transfer function T(f). Negative T(f) values will mean overdense regions become underdense, and since we work in log space, these will be undesirably neglected. The MUSIC file responsible for that is the src/plugins/transfer_camb.cc (lines 133-159).
   
- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
--  After the IC are generated, one needs to run PoR to actually perform the hydrodynamical simulations. There is a number of parameters one needs to pay attention. The ngridmax and npartmax usually are set to be equal. If ngridmax >> $2^{lmin^3}$, then the grid is oversized. This happens for instance in this movie of [Wittenburg et al. 2023](10.1093/mnras/stad1371)(https://www.youtube.com/watch?v=6dDqgxzIuqg), when one can basically see the grid structure. This naturally increases the integration time and the simulation slows down. Therefore, I have noticed thatit should be: $2^{lmin}$ < ngridmax=npartmax, but not $2^{lmin^3} << ngridmax! (if neither SF nor EFE are activated).
+2. After the IC are generated, one needs to run PoR to actually perform the hydrodynamical simulations. There is a number of parameters one needs to pay attention. The ngridmax and npartmax usually are set to be equal. If ngridmax >> $2^{lmin^3}$, then the grid is oversized. This happens for instance in this movie of [Wittenburg et al. 2023](10.1093/mnras/stad1371)(https://www.youtube.com/watch?v=6dDqgxzIuqg), when one can basically see the grid structure. This naturally increases the integration time and the simulation slows down. Therefore, I have noticed thatit should be: $2^{lmin}$ < ngridmax=npartmax, but not $2^{lmin^3} << ngridmax! (if neither SF nor EFE are activated).
 More particularly, if ngridmax is manually set to = 2,100,000, the:
 ngridmax -$2^{lmin^3}$ = 2,100,000 - 2,097,152 > 0 (but not >> 0). Last, also take into account this note by RAMSES: https://ramses-organisation.readthedocs.io/en/latest/wiki/Amr.htm
 
@@ -154,7 +155,7 @@ Most likely, this procedure (no MPI needed here) will end with an error in less 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-6. pynbody
+5. pynbody
    To plot in physical coordinates the snapshots are redshift $z=0$.
 ```
 import numpy as np
