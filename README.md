@@ -22,7 +22,7 @@ I follow the [Wittenburg et al. 2023](10.1093/mnras/stad1371) protocol. The ster
 
 The CAMB opt-nuHDM will NOT fit the Planck CMB. While the opt-nuHDM was a nearly perfect fit to the CMB, with CosmoSIS mcmc sampler, if one writes the output posterior parameters into CAMB, one simple does not find any correspondance and the fit is bad. I solved this problem, by scaling the resulting z = 199 transfer function, so that the CAMB transfer function is the same as the CosmoSIS one. This is not the best way to do it, but one needs to understand the different physics that the two codes are making use of. In the end, one needs not the CMB but the Transfer function for MUSIC. Obviously, one obtains one transfer function for nuHDM and one for the opt-nuHDM, running the corresponding namelists. Once they are generated, each of them individually go to MUSIC. For more details, see Samaras & Kroupa 2026, subm.
 
--  [Wittenburg et al. 2023](10.1093/mnras/stad1371) have modified MUSIC in the source code, in order to include the negative values of the transfer function T(f). Negative T(f) values will mean overdense regions become underdense, and since we work in log space, these will be undesirably neglected. The MUSIC file responsible for that is the src/plugins/transfer_camb.cc (lines 133-159).
+-  [Wittenburg et al. 2023](10.1093/mnras/stad1371) have modified MUSIC in the source code, in order to include the negative values of the transfer function T(f). Negative T(f) values will mean overdense regions become underdense, and since we work in log space, these will be undesirably neglected. The MUSIC file responsible for that is the src/plugins/transfer_camb.cc (lines 133-159). The two modified MUSIC files are: outputgraphis-graphic.cc and transfer-camb.cc
   
  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -115,7 +115,9 @@ Remember that RAMSES (https://ramses-organisation.readthedocs.io/en/latest/wiki/
 -  gnuplot rmvloop.gp
   
 In case this does not work, there is a stupid solution which always works. One needs to comment out from all the info_000XXX files the last lines right after unit_t with #comment the
-lines specifying the ordering and the DOMAIN ind_min ind_max.
+lines specifying the ordering and the DOMAIN ind_min ind_max. 
+In the routine output_info in output_amr.f90 there are plot statements, of which I have made it add an '#' to some of them, so that gnuplot does not get confused by them (approximately at the lines are 494-507). 
+In movie.f90 it is near the top, starting around line 139, %("moviefiles(0) = ..." and so on)
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
