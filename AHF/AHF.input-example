@@ -1,7 +1,7 @@
 [AHF]
 
 # (stem of the) filename from which to read the data to be analysed
-ic_filename       = ./converted_opt_nuHDM+sfr/ramses2gadget_022.
+ic_filename       = ./ramses2gadget_025.
 
 # what type of input file (cf. src/libio/io_file.h)
 ic_filetype       = 61
@@ -10,7 +10,7 @@ ic_filetype       = 61
 snapID            = 071
 
 # prefix for the output files
-outfile_prefix    = investigating_opt_nuHDM_b200_lmin8_lmax9_sfr_noefe_output_00022
+outfile_prefix    = nuHDM_b200_lmin8_lmax9_sf_noefe_output_00025_better
 #outfile_prefix = bohemian_b100_lmin7_lmax12_all_output_00030
 
 # number of grid cells for the domain grid (1D)

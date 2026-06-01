@@ -1,0 +1,12 @@
+#!/bin/sh
+#SBATCH --time=00:30:00
+#SBATCH --mail-user=nicksam@sirrah.troja.mff.cuni.cz
+##SBATCH --mail-type=END,FAIL
+#SBATCH --job-name="AHF"
+#SBATCH -n 8
+#SBATCH -N 1
+##SBATCH -c 1
+#SBATCH --mem-per-cpu=10G
+#SBATCH -p ffa-short
+
+srun ./bin/AHF-v1.0-119 ./AHF.input-example
