@@ -3,8 +3,25 @@ This repository describes how to conduct cosmological MOND structure-formation s
 
 While early $\nu$ HDM studies relied on the _WMAP_ data, more recent ones like [Wittenburg et al. 2023](https://academic.oup.com/mnras/article/523/1/453/7157127?login=false) and [Russell et al. 2026](https://ui.adsabs.harvard.edu/abs/2026arXiv260221975R/abstract) are based on the _Planck_ data. The former is the hydrodynamical version of the simulations (baryonic gas and sterile neutrino as Hot Dark Matter) without Star-formation and the latter is the N-body one (only sterile neutrinos).
 
-[Samaras, Grandis and Kroupa 2025](10.1093/mnras/staf1041) have optimized the model, rebranding it as opt- $\nu$ HDM model, by finding the optimal fit of its cosmological parameters using Bayesian statistics. This patch contains all the required software to generate initial conditions and conduct the hydro simulations in both (flat, $\Omega_k = 0$) $\nu$ HDM and opt- $\nu$ HDM model.
-
+[Samaras, Grandis and Kroupa 2025](10.1093/mnras/staf1041) have optimized the model, rebranding it as opt- $\nu$ HDM model, by finding the optimal fit of its cosmological parameters using Bayesian statistics. This patch contains all the required software to generate initial conditions and conduct the hydro simulations in both (flat, $\Omega_k = 0$) $\nu$ HDM and opt- $\nu$ HDM model. In case you want to cite this work, please use:
+```
+@ARTICLE{2025arXiv251115325S,
+       author = {{Samaras}, Nikolaos},
+        title = "{Origin of Galaxies}",
+      journal = {arXiv e-prints},
+     keywords = {Cosmology and Nongalactic Astrophysics},
+         year = 2025,
+        month = nov,
+          eid = {arXiv:2511.15325},
+        pages = {arXiv:2511.15325},
+          doi = {10.48550/arXiv.2511.15325},
+archivePrefix = {arXiv},
+       eprint = {2511.15325},
+ primaryClass = {astro-ph.CO},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2025arXiv251115325S},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+```
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1. To generate the Initial Conditions with [CosmoSIS](https://cosmosis.readthedocs.io/en/latest/index.html), [CAMB](https://camb.readthedocs.io/en/latest/#) and [MUSIC](https://github.com/lue/music):
