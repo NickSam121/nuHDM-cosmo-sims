@@ -22,25 +22,18 @@ aout=0.005,0.01,0.05,0.055,0.06,0.0625,0.07,0.08,0.09,0.1,0.11,0.125,0.165,0.18,
 
 &INIT_PARAMS
 filetype='grafic'
-!initfile(1)='./ics_opt_nu2025_b200lmin9lmax12/level_009'
-!initfile(2)='./ics_opt_nu2025_b200lmin9lmax12/level_010'
-!initfile(3)='./ics_opt_nu2025_b200lmin9lmax12/level_011'
-!initfile(4)='./ics_opt_nu2025_b200lmin9lmax12/level_012'
-
-initfile(1)='./ics_opt_nu2025_b200lmn8lmx12/level_008'
-initfile(2)='./ics_opt_nu2025_b200lmn8lmx12/level_009'
-!initfile(3)='./ics_opt_nu2025_b200lmn8lmx12/level_010'
-!initfile(4)='./ics_opt_nu2025_b200lmn8lmx12/level_011'
-!initfile(5)='./ics_opt_nu2025_b200lmn8lmx12/level_012'
+initfile(1)='./ics_nu2025_b200lmin8lmax12/level_008'
+initfile(2)='./ics_nu2025_b200lmin8lmax12/level_009'
+initfile(3)='./ics_nu2025_b200lmin8lmax12/level_010'
+initfile(4)='./ics_nu2025_b200lmin8lmax12/level_011'
+initfile(5)='./ics_nu2025_b200lmin8lmax12/level_012'
 /
 
 &AMR_PARAMS
 levelmin=8
 levelmax=9
-!ngridmax=140000000
-!npartmax=140000000
-ngridmax=17000000
-npartmax=17000000
+ngridmax=20000000
+npartmax=20000000
 /
 
 &POISSON_PARAMS 
@@ -60,15 +53,6 @@ yield=0.1d0
 f_ek=0.5d0
 rbubble=150.0d0
 /
-
-!&PHYSICS_PARAMS
-!isothermal=.false.
-!cooling=.true.
-!g_star=1.6666D0
-!n_star=0.1D0
-!eps_star=0.0D0
-!t_star=0.0d0
-!/
 
 &HYDRO_PARAMS
 gamma=1.6666
@@ -105,6 +89,5 @@ deltax_frame=1.0,0.,1.0,0.,1.0,0.
 deltay_frame=1.0,0.,1.0,0.,1.0,0.
 deltaz_frame=1.0,0.,1.0,0.,1.0,0.
 proj_axis='z'
-movie_vars=1,1,0,0,0,1,1,1
-!movie_vars= temp, dens, vx,vy,vx, pres, dm, stars
+movie_vars=1,1,0,0,0,1,0,0
 /
