@@ -29,17 +29,9 @@ music_nuHDM_pk = 8.0*(np.pi**3.0)*music_nuHDM[:,5]#5 column for Ptotal
 music_opt_nuHDM_b200_lmin8lmx12 = np.loadtxt('/local/home/nicksam/Desktop/NS+2025/data/input_powerspec_opt_nuHDM_b200lmn8lmx12.txt', dtype='float', delimiter=None)
 music_opt_nuHDM_b200_lmin8lmx12_k = music_opt_nuHDM_b200_lmin8lmx12[:,0]
 music_opt_nuHDM_b200_lmin8lmx12_pk = 8.0*(np.pi**3.0)*music_opt_nuHDM_b200_lmin8lmx12[:,5]#5 column for Ptotal
+#########################################################################################################################################################
 
-#test = np.loadtxt ('/local/home/nicksam/Desktop/NS+2025/codes/pk_test_ahf.txt', dtype='float', delimiter=None)
-#test_k = lcdm199[:,0]
-#test_pk = lcdm199[:,1]
-
-#stacy = np.loadtxt ('/local/home/nicksam/Desktop/cream/nuHDM/CAMB-1.3.5/fortran/stacy_matterpower_z199.dat', dtype='float', delimiter=None)
-#stacy_k = stacy[:,0]
-#stacy_pk = stacy[:,1]
-###################################################################################
-
-###################################################################################
+#########################################################################################################################################################
 font1 = {'family':'serif','color':'black','size':30}
 plt.rcParams["figure.figsize"] = [6*4., 4*4.]
 #fig, ax1 = plt.subplots(1, 1)
@@ -71,7 +63,6 @@ ax1.plot(k_opt_nuHDM, pk_opt_nuHDM_z0, label = r"opt-$\nu$HDM - CosmoSIS - Samar
 #ax1.plot(music_opt_nuHDM_b200_lmin8lmx12_k, music_opt_nuHDM_b200_lmin8lmx12_pk, label = r"opt-$\nu$HDM - MUSIC - this work", color = "green", linewidth= 3.0)
 
 '''
-
 ax1.plot(lcdm_k, (lcdm_k**3)*(lcdm_pk)/(2*(np.pi)**2), label = r"$\Lambda$CDM - CAMB - Planck 2024", color = "blue", linewidth= 3.0)
 ax1.plot(nu_k, (nu_k**3)*(nu_pk)/(2*(np.pi)**2), label = r"$\nu$HDM - CAMB - Wittenburg+ 2023", color = "red", linewidth= 2.0)
 #ax1.plot(k_opt_nuHDM, (k_opt_nuHDM**3)*(pk_opt_nuHDM_z0/(2*(np.pi)**2)), label = r"opt-$\nu$HDM - CosmoSIS - Samaras+ 2025", color = "green", linewidth= 3.0)
