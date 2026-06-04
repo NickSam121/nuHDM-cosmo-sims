@@ -4,3 +4,5 @@ I do not scale the resulting opt_nuHDM transfer function at z = 199.0, despite t
 I just check with compare_tk.py that it fits well with the counterpart from cosmoSIS and then put it to MUSIC. 
 The CAMB opt-nuHDM scalSCs file does not fit the Planck CMB.
 The cosmoSIS opt-nuHDM tf fits the Planck CMB.
+
+Remember to show on the plot the absolute value of the tf.
