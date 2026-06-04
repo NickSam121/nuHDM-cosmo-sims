@@ -1,10 +1,8 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import scipy.optimize
-
-def monoExp(x, m, t, b):
-    return m * np.exp(-t * x) + b
-
+#############################################################################################################################################################################################
+#############################################################################################################################################################################################
 ##############################################################################
 opt_x    = np.genfromtxt(fname="/media/nsamaras/T7/Archive/cosmosis-standard-library_prague_home_directory/output/opt-angus/matter_power_transfer_func/k_h.txt", delimiter="")
 opt_y    = np.genfromtxt(fname="/media/nsamaras/T7/Archive/cosmosis-standard-library_prague_home_directory/output/opt-angus/matter_power_transfer_func/t_k.txt", delimiter="")
