@@ -1,1 +1,6 @@
-Remember to change the root (output_root) and the redshift. I start my simulations at z = 199.0.
+Remember to change the root (output_root) and the redshift. I start my simulations at z = 199.0. 
+
+I do not scale the resulting opt_nuHDM transfer function at z = 199.0, despite this was the original idea. 
+I just check with compare_tk.py that it fits well with the counterpart from cosmoSIS and then put it to MUSIC. 
+The CAMB opt-nuHDM scalSCs file does not fit the Planck CMB.
+The cosmoSIS opt-nuHDM tf fits the Planck CMB.
