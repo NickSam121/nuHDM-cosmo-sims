@@ -3,29 +3,24 @@ from matplotlib import pyplot as plt
 import numpy as np
 #########################################################################################################################################################
 
-################    Observations           #############################################################################################################
-#obs = np.loadtxt ('/local/home/nicksam/Desktop/NS+2025/data/2ds.txt', dtype='float', delimiter=None)
-#obs_k = obs[:,0]
-#obs_pk = obs[:,1]
 #########################################################################################################################################################
 nu199 = np.loadtxt('/local/home/nicksam/Desktop/cream/nuHDM/CAMB-1.3.5/fortran/angus_nils_matterpower.dat', dtype='float', delimiter=None)
 nu_k = nu199[:,0]         
 nu_pk = nu199[:,1]
+
+camb_opt_nu199 = np.loadtxt ('/local/home/nicksam/Desktop/cream/nuHDM/CAMB-1.3.5/fortran/angus_opt_matterpower_z199.dat', dtype='float', delimiter=None)
+camb_opt_nu_k = camb_opt_nu199[:,0]         
+camb_opt_nu_pk = camb_opt_nu199[:,1]
+
+lcdm199 = np.loadtxt ('/local/home/nicksam/Desktop/cream/nuHDM/CAMB-1.3.5/fortran/planck2024_matterpower.dat', dtype='float', delimiter=None)
+lcdm_k = lcdm199[:,0] 
+lcdm_pk = lcdm199[:,1]
 
 k_opt_nuHDM  = np.genfromtxt(fname="/local/home/nicksam/cosmosis-standard-library/output/opt-angus/matter_power_lin/k_h.txt", delimiter="")
 #z_opt_nuHDM  = np.genfromtxt(fname="/local/home/nicksam/cosmosis-standard-library/output/opt-angus/matter_power_lin/z.txt", delimiter="")
 pk_opt_nuHDM  = np.genfromtxt(fname="/local/home/nicksam/cosmosis-standard-library/output/opt-angus/matter_power_lin/p_k.txt", delimiter="")
 pk_opt_nuHDM_z0 = pk_opt_nuHDM[1,:]
 print(len(pk_opt_nuHDM_z0))
-
-camb_opt_nu199 = np.loadtxt ('/local/home/nicksam/Desktop/cream/nuHDM/CAMB-1.3.5/fortran/angus_opt_matterpower_z199.dat', dtype='float', delimiter=None)
-camb_opt_nu_k = camb_opt_nu199[:,0]         
-camb_opt_nu_pk = camb_opt_nu199[:,1]
-print(len(camb_opt_nu_k))
-
-lcdm199 = np.loadtxt ('/local/home/nicksam/Desktop/cream/nuHDM/CAMB-1.3.5/fortran/planck2024_matterpower.dat', dtype='float', delimiter=None)
-lcdm_k = lcdm199[:,0] 
-lcdm_pk = lcdm199[:,1]
 
 music_nuHDM = np.loadtxt('/local/home/nicksam/Desktop/NS+2025/data/input_powerspec_nuHDM.txt', dtype='float', delimiter=None)
 music_nuHDM_k = music_nuHDM[:,0]
@@ -67,18 +62,14 @@ ax1.set_xlim(0.0001,12)
 ax1.set_xlim(0.001,12) #NS 7May2025 for zoom in to probe different neutrino free-streaming lengths
 #ax1.set_ylim(bottom = 0.0000001, top= max(pk_lcdm_z0 + (1/2)*pk_lcdm_z0))
 
-#ax1.scatter(obs_k, obs_pk, label= "2dFGRS 2005",color = "black", linewidth= 3.0)
-
 ax1.plot(lcdm_k, lcdm_pk, label = r"$\Lambda$CDM - CAMB - $\it{Planck}$ 2024", color = "blue", linewidth= 3.0)
-
 ax1.plot(nu_k, nu_pk, label = r"$\nu$HDM - CAMB - Wittenburg+ 2023", color = "red", linewidth= 1.0)
-ax1.plot(music_nuHDM_k, music_nuHDM_pk, label = r"$\nu$HDM - MUSIC - this work", color = "red", linewidth= 3.0)
-
-#ax1.plot(k_opt_nuHDM, pk_opt_nuHDM_z0, label = r"opt-$\nu$HDM - CosmoSIS - Samaras+ 2025", color = "green", linewidth= 1.0)
+ax1.plot(k_opt_nuHDM, pk_opt_nuHDM_z0, label = r"opt-$\nu$HDM - CosmoSIS - Samaras+ 2025", color = "green", linewidth= 1.0)
 #ax1.plot(camb_opt_nu_k, camb_opt_nu_pk, label = r"opt-$\nu$HDM - CAMB - this work", color = "green", linewidth= 2.0, linestyle = "--")
+
+#ax1.plot(music_nuHDM_k, music_nuHDM_pk, label = r"$\nu$HDM - MUSIC - this work", color = "red", linewidth= 3.0)
 #ax1.plot(music_opt_nuHDM_b200_lmin8lmx12_k, music_opt_nuHDM_b200_lmin8lmx12_pk, label = r"opt-$\nu$HDM - MUSIC - this work", color = "green", linewidth= 3.0)
 
-#ax1.plot(stacy_k, stacy_pk, label = r"McGaugh 1999", color = "grey", linewidth= 1.0, linestyle = "-")
 '''
 
 ax1.plot(lcdm_k, (lcdm_k**3)*(lcdm_pk)/(2*(np.pi)**2), label = r"$\Lambda$CDM - CAMB - Planck 2024", color = "blue", linewidth= 3.0)
