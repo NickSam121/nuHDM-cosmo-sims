@@ -1,0 +1,20 @@
+[samarasn@hpc-head test_June2026]$ cat slurm 
+#!/bin/sh
+#SBATCH --time=12:00:00
+#SBATCH --mail-user=nicksam@sirrah.troja.mff.cuni.cz
+#SBATCH --mail-type=END,FAIL
+#SBATCH --job-name="optb1500"
+
+##SBATCH -C ib
+##SBATCH -c 2
+##SBATCH --threads-per-core=1
+##SBATCH --mem 490G
+
+#SBATCH -N 2
+#SBATCH -n 16
+#SBATCH --mem-per-cpu=50G
+#SBATCH -p ffa
+
+module load oneapi/mpi
+
+srun ~/bonnpor/PoR_hydro/ramses/bin/mine3d b1500.nml
