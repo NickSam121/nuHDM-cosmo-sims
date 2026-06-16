@@ -9,3 +9,5 @@ FFLAGS      = -O3 -fcommon
 LNFLAGS		= -O3 -Wall -fcommon  
 LDFLAGS     = -fcommon
 DEFINEFLAGS	+=	-DWITH_OPENMP 
+
+DEFINEFLAGS	= -DGADGET -DMULTIMASS -DGAS_PARTICLES
