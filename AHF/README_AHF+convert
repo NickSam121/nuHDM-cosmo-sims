@@ -16,3 +16,5 @@ DEFINEFLAGS	= -DGADGET -DMULTIMASS -DGAS_PARTICLES
 
 ############################################################
 gfortran -x f95-cpp-input ramses2gadget.f90 -o ramses2gadget
+
+./ramses2gadget -i output_00025_nuHDM_b200_lmin8_lmax9_sfr_noefe_z0/
