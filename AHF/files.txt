@@ -1,1 +1,11 @@
+put these flags and do make clean and then make
 
+CC         	=	gcc -std=c99 -fopenmp -fcommon 
+FC 	      	=	gfortran
+OPTIMIZE	=	-O3 -fcommon 
+CFLAGS		=	-O3 -Wall -fcommon
+CFLAGS      = -O3 -Wall -fcommon 
+FFLAGS      = -O3 -fcommon 
+LNFLAGS		= -O3 -Wall -fcommon  
+LDFLAGS     = -fcommon
+DEFINEFLAGS	+=	-DWITH_OPENMP 
