@@ -1,1 +1,45 @@
+There seems to be case sensitive and "space" sensitive in the params.ini. If pk file cannot be found, then remove all spaces after "#", where Breton has addede a comment for each quantity.
+###############################################################################################################################################################################################
 
+###############################################################################################################################################################################################
+from matplotlib import pyplot as plt
+import numpy as np
+
+pysco_lcdm = np.loadtxt('/home/nsamaras/Desktop/astro/OPEN_nuHDM/STEM566_CAMB+CLASS/pysco/examples/b200_n256_l8_lcdm/power/pk_newton_multigrid_ncoarse8_00081.dat', dtype='float', delimiter=None)
+pysco_lcdm_k = pysco_lcdm[:,0]
+pysco_lcdm_pk = pysco_lcdm[:,1]
+
+pysco_nuHDM = np.loadtxt('/home/nsamaras/Desktop/astro/OPEN_nuHDM/STEM566_CAMB+CLASS/pysco/examples/b200_n256_l8_nuHDM_z0/power/pk_mond_g0_1.2_exponent_0_simple_multigrid_ncoarse8_00148.dat', dtype='float', delimiter=None)
+pysco_nuHDM_k = pysco_nuHDM[:,0]
+pysco_nuHDM_pk = pysco_nuHDM[:,1]
+
+pysco_opt_nuHDM = np.loadtxt('/home/nsamaras/Desktop/astro/OPEN_nuHDM/STEM566_CAMB+CLASS/pysco/examples/b200_n256_l8_opt_nuHDM_z0/power/pk_mond_g0_1.2_exponent_0_simple_multigrid_ncoarse8_00147.dat', dtype='float', delimiter=None)
+pysco_opt_nuHDM_k = pysco_opt_nuHDM[:,0]
+pysco_opt_nuHDM_pk = pysco_opt_nuHDM[:,1]
+
+font2 = {'family':'serif','color':'black','size':20}
+plt.rcParams["figure.figsize"] = [6*4., 4*4.]
+fig, ax1 = plt.subplots()	
+dex_x = [0.0001, 0.001, 0.01, 0.1, 1, 10, 12]
+dex_x2 = [0.001, 0.01, 0.1, 1]
+dex_y = [0.0000001, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0, 10, 100, 1000, 10000]
+dex_y2 = [0.1, 0.2, 0.5, 0.75, 1.2]
+ax1.set_xticks(dex_x)
+ax1.set_xticklabels(dex_x, fontsize=30)
+ax1.set_yticks(dex_y)
+ax1.set_yticklabels(dex_y, fontsize=30)
+
+ax1.set_yscale("log")
+ax1.set_xscale("log")
+ax1.set_xlabel("Wavenumber k [h/Mpc]", fontdict=font1)
+ax1.set_ylabel(r"P(k) $[(h^{-1}Mpc)^3]$", fontdict=font1)
+
+ax1.plot(pysco_lcdm_k, pysco_lcdm_pk, label = r"$\Lambda$CDM - PySCo - n256-l8", color="blue", linewidth = 4, linestyle = "--")
+ax1.plot(pysco_nuHDM_k, pysco_nuHDM_pk, label = r"$\nu$HDM - PySCo - n256-l8", color="red", linewidth = 4, linestyle = "--")
+ax1.plot(pysco_opt_nuHDM_k, pysco_opt_nuHDM_pk, label = r"opt-$\nu$HDM - PySCo - n256-l8", color="green", linewidth = 4, linestyle = "--")
+
+ax1.legend(loc="lower left", fontsize = 21)
+ax1.grid()
+#ax1.set_title("Matter Power Spectrum at z = 0", fontsize = 30)
+plt.show()
+###############################################################################################################################################################################################
