@@ -1,5 +1,5 @@
 put these flags and do make clean and then make
-
+############################################################
 CC         	=	gcc -std=c99 -fopenmp -fcommon 
 FC 	      	=	gfortran
 OPTIMIZE	=	-O3 -fcommon 
@@ -11,3 +11,8 @@ LDFLAGS     = -fcommon
 DEFINEFLAGS	+=	-DWITH_OPENMP 
 
 DEFINEFLAGS	= -DGADGET -DMULTIMASS -DGAS_PARTICLES
+############################################################
+
+
+############################################################
+gfortran -x f95-cpp-input ramses2gadget.f90 -o ramses2gadget
