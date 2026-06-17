@@ -1,4 +1,4 @@
-put these flags and do make clean and then make
+put these flags and do make clean and then make. I believe that there is absolutely no possibility when compiling the program for an error not to occur!
 ############################################################
 CC         	=	gcc -std=c99 -fopenmp -fcommon 
 FC 	      	=	gfortran
@@ -18,3 +18,4 @@ DEFINEFLAGS	= -DGADGET -DMULTIMASS -DGAS_PARTICLES
 gfortran -x f95-cpp-input ramses2gadget.f90 -o ramses2gadget
 
 ./ramses2gadget -i output_00025_nuHDM_b200_lmin8_lmax9_sfr_noefe_z0/
+
