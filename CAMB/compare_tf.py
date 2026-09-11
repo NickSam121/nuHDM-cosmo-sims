@@ -10,7 +10,7 @@ opt_y    = np.genfromtxt(fname="/media/nsamaras/T7/Archive/cosmosis-standard-lib
 
 camb_opt_nu199 = np.loadtxt ('/home/nsamaras/Desktop/astro/AUUK_CAMB+CLASS/CAMB-1.3.5/fortran/angus_opt_transfer_out_z199.dat', dtype='float', delimiter=None)
 camb_opt_nu_k = camb_opt_nu199[:,0]
-camb_opt_nu_tk = 15*camb_opt_nu199[:,5]
+camb_opt_nu_tk = 15*camb_opt_nu199[:,5] #BEWARE HERE!!
 
 camb_nu199 = np.loadtxt ('/home/nsamaras/Desktop/astro/AUUK_CAMB+CLASS/CAMB-1.3.5/fortran/angus_nils_transfer_out.dat', dtype='float', delimiter=None)
 camb_nu_k = camb_nu199[:,0]         
